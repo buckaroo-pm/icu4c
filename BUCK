@@ -1,132 +1,82 @@
+remote_file(
+  name = 'icu4c-data-linux',
+  out = 'icu4c-data.zip',
+  type = 'exploded_zip',
+  url = 'https://github.com/nikhedonia/icu4c.S/archive/ca722d76845bf951fad0a82e4dd3a06805aa009c.zip',
+  sha1 = 'eb0f27b44dabc9035444fef8b0ee343027abb7d3',
+)
+
 genrule(
-  name = 'make',
-  out = 'out',
-  srcs = glob([
-    'source/**/*.h',
-    'source/**/*.c',
-    'source/**/*.cpp',
-    'source/**/*.cnv',
-    'source/**/*.icu',
-    'source/**/*.in',
-    'source/**/*.mak',
-    'source/**/*.mk',
-    'source/**/*.m4',
-    'source/**/*.nrm',
-    'source/**/*.res',
-    'source/**/*.sed',
-    'source/**/*.txt',
-    'source/**/*.ucm',
-    'source/**/*.xml',
-    'source/config/mh-*',
-    'source/config/icu-*',
-    'source/config.guess',
-    'source/config.sub',
-    'source/configure',
-    'source/install-sh',
-    'source/mkinstalldirs',
-    'source/runConfigureICU',
-  ], excludes = glob([
-    'source/samples/**/*.h',
-    'source/samples/**/*.cpp',
-    'source/samples/**/*.c',
-    'source/samples/**/*.txt',
-    'source/samples/*/**/*.in',
-  ])),
-  cmd =
-    'platform=\$(case $(uname) in ' +
-        '("Linux") ' +
-        '  echo "Linux" ' +
-        ';; ' +
-        '("Darwin") ' +
-        '  echo "MacOSX" ' +
-        ';; ' +
-        '(*) ' +
-        '  echo "Unknown" ' +
-        ';; ' +
-    'esac); ' +
-    'cp -r $SRCDIR $OUT && ' +
-    'mkdir -p $OUT/source/samples/cal/ && ' +
-    'cp $(location //source/samples/cal:Makefile.in) $OUT/source/samples/cal/Makefile.in && ' +
-    'mkdir -p $OUT/source/samples/date/ && ' +
-    'cp $(location //source/samples/date:Makefile.in) $OUT/source/samples/date/Makefile.in && ' +
-    'mkdir -p $OUT/source/samples/layout/ && ' +
-    'cp $(location //source/samples/layout:Makefile.in) $OUT/source/samples/layout/Makefile.in && ' +
-    'cd $OUT && ./source/runConfigureICU $platform --enable-static --enable-samples=no && make',
-)
-
-prebuilt_cxx_library(
-  name = 'icudata',
-  header_namespace = '',
-  preferred_linkage = 'static',
-  lib_name = 'icudata',
-  lib_dir = '$(location :make)/lib',
-  deps = [
-    ':make',
+  name = 'icudt59l_dat-linux',
+  srcs = [
+    ':icu4c-data-linux'
   ],
+  out = 'icudt59l_dat.S',
+  cmd = 'cp $(location :icu4c-data-linux)/icu4c.S-ca722d76845bf951fad0a82e4dd3a06805aa009c/icudt59l_dat.S $OUT'
 )
 
-prebuilt_cxx_library(
-  name = 'icui18n',
-  header_namespace = '',
-  preferred_linkage = 'static',
-  lib_name = 'icui18n',
-  lib_dir = '$(location :make)/lib',
-  deps = [
-    ':make',
+remote_file(
+  name = 'icu4c-data-macos',
+  out = 'icu4c-data.zip',
+  type = 'exploded_zip',
+  url = 'https://github.com/njlr/icu4c.S/archive/a73ea552920b0a72891012e124ca5ea7a74409e0.zip',
+  sha1 = 'c3f0248d319b8322d2e725510ca6b4a327ee1471',
+)
+
+genrule(
+  name = 'icudt59l_dat-macos',
+  srcs = [
+    ':icu4c-data-macos'
   ],
+  out = 'icudt59l_dat.S',
+  cmd = 'cp $(location :icu4c-data-macos)/icu4c.S-a73ea552920b0a72891012e124ca5ea7a74409e0/icudt59l_dat.S $OUT'
 )
 
-prebuilt_cxx_library(
-  name = 'icuio',
-  header_namespace = '',
-  preferred_linkage = 'static',
-  lib_name = 'icuio',
-  lib_dir = '$(location :make)/lib',
-  deps = [
-    ':make',
-  ],
-)
-
-prebuilt_cxx_library(
-  name = 'icutu',
-  header_namespace = '',
-  preferred_linkage = 'static',
-  lib_name = 'icutu',
-  lib_dir = '$(location :make)/lib',
-  deps = [
-    ':make',
-  ],
-)
-
-prebuilt_cxx_library(
-  name = 'icuuc',
-  header_namespace = '',
-  preferred_linkage = 'static',
-  lib_name = 'icuuc',
-  lib_dir = '$(location :make)/lib',
-  deps = [
-    ':make',
-  ],
-)
-
-prebuilt_cxx_library(
+cxx_library(
   name = 'icu4c',
-  header_only = True,
-  header_namespace = 'unicode',
-  preferred_linkage = 'static',
   exported_headers = subdir_glob([
-    ('source/common/unicode', '*.h'),
-    ('source/i18n/unicode', '*.h'),
+     ('source/io', '**/*.h'),
+     ('source/data', '**/*.h'),
+     ('source/extra', '**/*.h'),
+     ('source/i18n', '**/*.h'),
+     ('source/common', '**/*.h'),
+     ('source/common/unicode', '**/*.h'),
   ]),
-  exported_preprocessor_flags = [
-    '-DU_STATIC_IMPLEMENTATION',
+  headers = glob([
+    ('source/**/*.h'),
+  ], excludes = glob([
+    'source/samples/**/*.h'
+  ])),
+  srcs = glob([
+    'source/data/**/*.cpp',
+    'source/io/**/*.cpp',
+    'source/i18n/**/*.cpp',
+    'source/common/**/*.cpp',
+  ], excludes = glob([
+    'source/**/*test.cpp',
+    'source/samples/**/.cpp',
+  ])),
+  platform_srcs = [
+    ('default', [':icudt59l_dat-linux']),
+    ('^macos.*', [':icudt59l_dat-macos']),
+    ('^linux.*', [':icudt59l_dat-linux']),
   ],
-  exported_deps = [
-    ':icudata',
-    ':icui18n',
-    ':icuio',
-    ':icutu',
-    ':icuuc',
+  preprocessor_flags = [
+    '-DUNISTR_FROM_CHAR_EXPLICIT=explicit',
+    '-DUNISTR_FROM_STRING_EXPLICIT=explicit',
+    '-DU_ENABLE_DYLOAD=1',
+    '-DHAVE_DLFCN_H=1',
+    '-DHAVE_DLOPEN=1',
+    '-DU_IO_IMPLEMENTATION',
+    '-DU_I18N_IMPLEMENTATION',
+    '-DU_COMMON_IMPLEMENTATION',
+  ],
+  compiler_flags = [
+    '-std=c++11',
+  ],
+  exported_platform_linker_flags = [
+    ('default', ['-ldl']),
+    ('^linux.*', ['-ldl']),
   ],
   visibility = [
     'PUBLIC',
