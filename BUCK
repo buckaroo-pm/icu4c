@@ -1,3 +1,14 @@
+prebuilt_cxx_library(
+  name = 'pthread', 
+  header_only = True, 
+  exported_linker_flags = [ 
+    '-ldl', 
+  ],
+  visibility = [
+    'PUBLIC', 
+  ], 
+)
+
 remote_file(
   name = 'icu4c-data-linux',
   out = 'icu4c-data.zip',
@@ -57,9 +68,8 @@ cxx_library(
     'source/samples/**/.cpp',
   ])),
   platform_srcs = [
-    ('default', [':icudt59l_dat-linux']),
-    ('^macos.*', [':icudt59l_dat-macos']),
-    ('^linux.*', [':icudt59l_dat-linux']),
+    ('^macos.*', [ ':icudt59l_dat-macos' ]),
+    ('^linux.*', [ ':icudt59l_dat-linux' ]),
   ],
   preprocessor_flags = [
     '-DUNISTR_FROM_CHAR_EXPLICIT=explicit',
@@ -71,13 +81,9 @@ cxx_library(
     '-DU_I18N_IMPLEMENTATION',
     '-DU_COMMON_IMPLEMENTATION',
   ],
-  compiler_flags = [
-    '-std=c++11',
-  ],
-  exported_platform_linker_flags = [
-    ('default', ['-ldl']),
-    ('^linux.*', ['-ldl']),
-  ],
+  platform_deps = [
+    ('linux*', [ ':pthread' ])
+  ], 
   visibility = [
     'PUBLIC',
   ],

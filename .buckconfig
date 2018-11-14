@@ -1,2 +1,9 @@
+[project]
+  ignore = .git
+
+[cxx]
+  should_remap_host_platform = true
+  cxxflags = "-std=c++11"
+
 [download]
   in_build = true
