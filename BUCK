@@ -60,7 +60,7 @@ cxx_library(
     ('source/i18n', '**/*.h'),
     ('source/common', '**/*.h'),
     ('source/common/unicode', '**/*.h'),
-    ('source/**/*.h'),
+    ('source', '**/*.h'),
   ], excludes = glob([
     'source/samples/**/*.h'
   ])),
