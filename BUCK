@@ -45,15 +45,21 @@ genrule(
 
 cxx_library(
   name = 'icu4c',
+  header_namespace = '', 
   exported_headers = subdir_glob([
+     ('source/io', 'unicode/**/*.h'),
+     ('source/data', 'unicode/**/*.h'),
+     ('source/extra', 'unicode/**/*.h'),
+     ('source/i18n', 'unicode/**/*.h'),
+     ('source/common', 'unicode/**/*.h'),
+  ]),
+  headers = glob([
      ('source/io', '**/*.h'),
      ('source/data', '**/*.h'),
      ('source/extra', '**/*.h'),
      ('source/i18n', '**/*.h'),
      ('source/common', '**/*.h'),
      ('source/common/unicode', '**/*.h'),
-  ]),
-  headers = glob([
     ('source/**/*.h'),
   ], excludes = glob([
     'source/samples/**/*.h'
@@ -68,8 +74,8 @@ cxx_library(
     'source/samples/**/.cpp',
   ])),
   platform_srcs = [
-    ('^macos.*', [ ':icudt59l_dat-macos' ]),
-    ('^linux.*', [ ':icudt59l_dat-linux' ]),
+    ('macos.*', [ ':icudt59l_dat-macos' ]),
+    ('linux.*', [ ':icudt59l_dat-linux' ]),
   ],
   preprocessor_flags = [
     '-DUNISTR_FROM_CHAR_EXPLICIT=explicit',
