@@ -53,13 +53,13 @@ cxx_library(
      ('source/i18n', 'unicode/**/*.h'),
      ('source/common', 'unicode/**/*.h'),
   ]),
-  headers = glob([
-     ('source/io', '**/*.h'),
-     ('source/data', '**/*.h'),
-     ('source/extra', '**/*.h'),
-     ('source/i18n', '**/*.h'),
-     ('source/common', '**/*.h'),
-     ('source/common/unicode', '**/*.h'),
+  headers = subdir_glob([
+    ('source/io', '**/*.h'),
+    ('source/data', '**/*.h'),
+    ('source/extra', '**/*.h'),
+    ('source/i18n', '**/*.h'),
+    ('source/common', '**/*.h'),
+    ('source/common/unicode', '**/*.h'),
     ('source/**/*.h'),
   ], excludes = glob([
     'source/samples/**/*.h'
