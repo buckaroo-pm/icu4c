@@ -62,7 +62,7 @@ cxx_library(
     ('source/common/unicode', '**/*.h'),
     ('source', '**/*.h'),
   ], excludes = glob([
-    'source/samples/**/*.h'
+    'source/samples/**/*.h', 
   ])),
   srcs = glob([
     'source/data/**/*.cpp',
@@ -88,7 +88,7 @@ cxx_library(
     '-DU_COMMON_IMPLEMENTATION',
   ],
   platform_deps = [
-    ('linux*', [ ':pthread' ])
+    ('linux*', [ ':pthread' ]), 
   ], 
   visibility = [
     'PUBLIC',

@@ -13,9 +13,9 @@ cxx_binary(
   srcs = [
     'break.cpp',
   ],
-  compiler_flags = [
-    '-std=c++11',
-  ],
+  # compiler_flags = [
+  #   # '-std=c++11',
+  # ],
   deps = [
     '//:icu4c',
     ':ubreak',
