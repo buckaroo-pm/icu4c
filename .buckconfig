@@ -3,7 +3,7 @@
 
 [cxx]
   should_remap_host_platform = true
-  untracked_headers = error
+  untracked_headers = warn
   cflags = -std=c11
   cxxflags = -std=c++11
 
