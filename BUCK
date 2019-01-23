@@ -1,12 +1,12 @@
 prebuilt_cxx_library(
-  name = 'pthread', 
-  header_only = True, 
-  exported_linker_flags = [ 
-    '-ldl', 
+  name = 'dl',
+  header_only = True,
+  exported_linker_flags = [
+    '-ldl',
   ],
   visibility = [
-    'PUBLIC', 
-  ], 
+    'PUBLIC',
+  ],
 )
 
 remote_file(
@@ -45,7 +45,7 @@ genrule(
 
 cxx_library(
   name = 'icu4c',
-  header_namespace = '', 
+  header_namespace = '',
   exported_headers = subdir_glob([
      ('source/io', 'unicode/**/*.h'),
      ('source/data', 'unicode/**/*.h'),
@@ -62,7 +62,7 @@ cxx_library(
     ('source/common/unicode', '**/*.h'),
     ('source', '**/*.h'),
   ], excludes = glob([
-    'source/samples/**/*.h', 
+    'source/samples/**/*.h',
   ])),
   srcs = glob([
     'source/data/**/*.cpp',
@@ -88,8 +88,8 @@ cxx_library(
     '-DU_COMMON_IMPLEMENTATION',
   ],
   platform_deps = [
-    ('linux*', [ ':pthread' ]), 
-  ], 
+    ('linux*', [ ':dl' ]),
+  ],
   visibility = [
     'PUBLIC',
   ],
