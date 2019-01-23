@@ -3,4 +3,6 @@
 /.buckd/
 /buckaroo/
 .buckconfig.local
+.buckconfig.d
+buckaroo_macros.bzl
 BUCKAROO_DEPS
