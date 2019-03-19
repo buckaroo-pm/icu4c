@@ -71,7 +71,7 @@ cxx_library(
     'source/common/**/*.cpp',
   ], excludes = glob([
     'source/**/*test.cpp',
-    'source/samples/**/.cpp',
+    'source/samples/**/*.cpp',
   ])),
   platform_srcs = [
     ('macos.*', [ ':icudt59l_dat-macos' ]),
